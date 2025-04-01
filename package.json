@@ -1,0 +1,29 @@
+{
+  "name": "skillswap",
+  "version": "1.0.0",
+  "description": "A marketplace for skills just like anything else",
+  "homepage": "https://github.com/sohivansh/SkillSwap#readme",
+  "bugs": {
+    "url": "https://github.com/sohivansh/SkillSwap/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sohivansh/SkillSwap.git"
+  },
+  "license": "MIT",
+  "author": "Vansh Sohi",
+  "main": "index.js",
+  "scripts": {
+    "sass:bootstrap": "sass scss/bootstrap.scss css/bootstrap.css --watch",
+    "sass:styles": "sass scss/styles.scss css/styles.css --watch",
+    "sass": "npm run sass:bootstrap & npm run sass:styles"
+  },
+  "devDependencies": {
+    "bootstrap": "^5.3.3",
+    "sass": "^1.85.1"
+  },
+  "dependencies": {
+    "rough-notation": "^0.5.1",
+    "skillswap": "file:"
+  }
+}
