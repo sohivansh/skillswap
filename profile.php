@@ -68,10 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_skill'])) {
     
     $conn = get_db_connection();
     
-    // Delete from user_skills first
-    $stmt = $conn->prepare("DELETE FROM user_skills WHERE skill_id = ? AND user_id = ?");
-    $stmt->bind_param("ii", $skill_id, $user_id);
-    $stmt->execute();
     
     // Then delete from skills
     $stmt = $conn->prepare("DELETE FROM skills WHERE id = ? AND user_id = ?");

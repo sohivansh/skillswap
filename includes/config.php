@@ -72,76 +72,6 @@ if (!$conn->query($sql)) {
     die("Error creating skills table: " . $conn->error);
 }
 
-// Create user_skills table (for many-to-many relationship)
-$sql = "CREATE TABLE IF NOT EXISTS user_skills (
-    user_id INT,
-    skill_id INT,
-    proficiency_level ENUM('Beginner', 'Intermediate', 'Advanced', 'Expert') NOT NULL,
-    is_teaching BOOLEAN DEFAULT FALSE,
-    is_learning BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, skill_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE CASCADE
-)";
-
-if (!$conn->query($sql)) {
-    die("Error creating user_skills table: " . $conn->error);
-}
-
-// Create swap_sessions table
-$sql = "CREATE TABLE IF NOT EXISTS swap_sessions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    teacher_id INT,
-    student_id INT,
-    skill_id INT,
-    status ENUM('Pending', 'Accepted', 'Completed', 'Cancelled') DEFAULT 'Pending',
-    scheduled_date DATETIME,
-    duration_minutes INT,
-    notes TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (teacher_id) REFERENCES users(id),
-    FOREIGN KEY (student_id) REFERENCES users(id),
-    FOREIGN KEY (skill_id) REFERENCES skills(id)
-)";
-
-if (!$conn->query($sql)) {
-    die("Error creating swap_sessions table: " . $conn->error);
-}
-
-// Create reviews table
-$sql = "CREATE TABLE IF NOT EXISTS reviews (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    session_id INT,
-    reviewer_id INT,
-    reviewed_id INT,
-    rating INT CHECK (rating >= 1 AND rating <= 5),
-    comment TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (session_id) REFERENCES swap_sessions(id),
-    FOREIGN KEY (reviewer_id) REFERENCES users(id),
-    FOREIGN KEY (reviewed_id) REFERENCES users(id)
-)";
-
-if (!$conn->query($sql)) {
-    die("Error creating reviews table: " . $conn->error);
-}
-
-// Create notifications table
-$sql = "CREATE TABLE IF NOT EXISTS notifications (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    message TEXT NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-)";
-
-if (!$conn->query($sql)) {
-    die("Error creating notifications table: " . $conn->error);
-}
-
 // Create swap_requests table
 $sql = "CREATE TABLE IF NOT EXISTS swap_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -155,5 +85,10 @@ $sql = "CREATE TABLE IF NOT EXISTS swap_requests (
 
 if (!$conn->query($sql)) {
     die("Error creating swap_requests table: " . $conn->error);
+}
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 ?> 
