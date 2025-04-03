@@ -31,7 +31,7 @@ SkillSwap is a web platform that enables users to exchange skills and knowledge 
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/skillswap.git
+git clone https://github.com/sohivansh/skillswap.git
 ```
 
 2. Import the database
