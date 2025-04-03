@@ -21,6 +21,9 @@ if (!$requested_id) {
     exit();
 }
 
+// Get database connection
+$conn = get_db_connection();
+
 // Check if request already exists
 $check_sql = "SELECT id FROM swap_requests 
               WHERE requester_id = ? AND requested_id = ? AND status = 'Pending'";
@@ -30,6 +33,8 @@ $check_stmt->execute();
 $result = $check_stmt->get_result();
 
 if ($result->num_rows > 0) {
+    $check_stmt->close();
+    $conn->close();
     header("Location: swaps.php?error=Request already sent");
     exit();
 }
@@ -44,4 +49,7 @@ if ($stmt->execute()) {
 } else {
     header("Location: swaps.php?error=Failed to send request");
 }
+
+$stmt->close();
+$conn->close();
 exit(); 

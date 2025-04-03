@@ -14,6 +14,9 @@ if (!is_logged_in()) {
 
 $user_id = $_SESSION['user_id'];
 
+// Get database connection
+$conn = get_db_connection();
+
 // Get all users and their skills (excluding current user)
 $sql = "SELECT u.id, u.username, GROUP_CONCAT(
             CONCAT(s.skill_name, 
@@ -34,11 +37,20 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $users = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
+$stmt->close();
+$conn->close();
+
 include "./includes/header.php";
 ?>
 
 <div class="container mt-5">
     <h2 class="mb-4">Find Swaps</h2>
+    <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
+    <?php endif; ?>
+    <?php if (isset($_GET['success'])): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($_GET['success']); ?></div>
+    <?php endif; ?>
     <div class="row">
         <?php foreach ($users as $user): ?>
             <div class="col-md-4 mb-4">
